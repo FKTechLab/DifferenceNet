@@ -1,10 +1,10 @@
 # Trajectory Identification (TI)
-> DifferenceNet as ann alternative to Siamese Net for TI
+> DifferenceNet as an alternative to Siamese Net for TI
 
 
-<p align="middle">
-  <img src="https://github.com/FKTechLab/DifferenceNet/blob/main/ti/images/traj_half.png" width="50%" />
-  <img src="https://github.com/FKTechLab/DifferenceNet/blob/main/ti/images/traj_full.png" width="50%" />
+<p align="left">
+  <img src="https://github.com/FKTechLab/DifferenceNet/blob/main/ti/images/traj_half.png" width="30%" />
+  <img src="https://github.com/FKTechLab/DifferenceNet/blob/main/ti/images/traj_full.png" width="29.3%" />
 </p>
 
 ## How to use
