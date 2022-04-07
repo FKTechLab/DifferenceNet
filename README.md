@@ -8,5 +8,5 @@ A Simpler and More Efficient Alternative to Siamese Net
 
 ### Architecture: Difference Net for Heterogeneous Entity
 <p float="left">
-  <img src="https://github.com/FKTechLab/DifferenceNet/blob/main/images/hetero.png" width="500" />
+  <img src="https://github.com/FKTechLab/DifferenceNet/blob/main/images/hetero.png" width="200" />
 </p>
