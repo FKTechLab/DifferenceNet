@@ -1,5 +1,5 @@
 # Trajectory Identification (TI)
-> DifferenceNet as an alternative to Siamese Net for TI
+> DifferenceNet as ann alternative to Siamese Net for TI
 
 
 <p align="left">
