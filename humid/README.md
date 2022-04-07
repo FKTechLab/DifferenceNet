@@ -4,7 +4,9 @@
 Comparison between Difference Net and ST-Siamese Net for the HuMID problem.
 
 ## Architecture: DifferenceNet
-![alt text](https://github.com/FKTechLab/DifferenceNet/blob/main/humid/images/DN-HuMID.png)
+<p float="left">
+  <img src="https://github.com/FKTechLab/DifferenceNet/blob/main/humid/images/DN-HuMID.png" width="300" />
+</p>
 
 ## Requirements
 ```sh
