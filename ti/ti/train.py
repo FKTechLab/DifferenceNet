@@ -25,15 +25,15 @@ from .model import Difference, TrajectoryDN, TrajectorySN, ContrastiveLoss
 torch.cuda.is_available()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 BATCH_SIZE = 4
-EPOCHS = 10
-mode = 'sim'
-run_name = f'run_simulatedsubtraj_Batch{BATCH_SIZE}_EPOCHS{EPOCHS}'
+EPOCHS = 1
+mode = 'real'
+run_name = f'run_5part_tran_normalsubtraj_Batch{BATCH_SIZE}_EPOCHS{EPOCHS}'
 run_name
 
 # Cell
 def get_data_and_model(params, model='DN', mode='sim'):
     stw = getSTW(mode)
-    tr_range, val_range, ts_range = splitData(len(stw))
+    tr_range, val_range = splitData(len(stw))
     # Partitions
     partition = {
         'train': tr_range,
@@ -203,6 +203,7 @@ def test(model, test_loader, criterion, threshold, mtype='DN'):
     acc = round(accuracy_score(y_true, y_pred), 2)
     p,r,f = get_prf(y_true, y_pred)
     return avg_loss, acc, p,r,f
+
 
 # Cell
 def train_DN(train_g, val_g, net, lr, threshold, num_epochs, print_at):

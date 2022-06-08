@@ -19,12 +19,12 @@ class Transformer:
     def transform(self, X):
         '''Break down X into x1 and x2'''
         x1 = X[self.features_traj].values
-        x1[:, 0] = x1[:, 0]/90.0
-        x1[:, 1] = x1[:, 1]/180.0
+        # x1[:, 0] = x1[:, 0]/90.0
+        # x1[:, 1] = x1[:, 1]/180.0
         x1 = x1.tolist()
 
         x2_org = X[self.features_org].values
-        x2_org[:, 0] = x2_org[:, 0]/90.0
-        x2_org[:, 1] = x2_org[:, 1]/180.0
+        # x2_org[:, 0] = x2_org[:, 0]/90.0
+        # x2_org[:, 1] = x2_org[:, 1]/180.0
         x2_org = x2_org.tolist()
         return x1, x2_org

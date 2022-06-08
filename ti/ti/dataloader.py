@@ -17,8 +17,8 @@ from .prep import Transformer
 
 # Cell
 file_dir = os.path.dirname(os.path.realpath(__file__)) if '__file__' in globals() else './'
-def getSTW(mode='sim'):
-    window_file = os.path.join(file_dir, '../data/%s/'%(mode), 'space_time_windows')
+def getSTW(mode='sim', is_train=True):
+    window_file = os.path.join(file_dir, '../data/%s/%s/'%(mode, 'train' if is_train else 'test'), 'space_time_windows')
     if not os.path.exists(window_file):
         print('Space time window doesn\'t exist create one first!: ', window_file)
         raise NotADirectoryError("Data folder not found")
@@ -28,12 +28,10 @@ def getSTW(mode='sim'):
 
 # Cell
 def splitData(size):
-    train_size = int(size*0.8) # 80%
-    val_size = int(size*0.1) # 10%
-    test_size = size - (train_size+val_size) # 10%
+    train_size = int(size*0.9) # 90%
+    test_size = int(size*0.1) # 10%
     return (range(train_size),
-            range(train_size, train_size+val_size),
-            range(train_size+val_size, train_size+val_size+test_size))
+            range(train_size, train_size+test_size))
 
 # Cell
 class DatasetTraj(Dataset):
@@ -46,10 +44,13 @@ class DatasetTraj(Dataset):
 
     def __len__(self):
         '''Denotes the total number of samples'''
-        return len(self.list_ids)
+        lengths = [len(i) for i in self.space_time_window_list]
+        avg = sum(lengths)/len(self.space_time_window_list)
+        return len(self.list_ids) * int(avg)
 
     def __getitem__(self, index):
         '''Generates one sample of data'''
+        index = index % len(self.list_ids)
         id = self.list_ids[index]
         is_positive = random.getrandbits(1) # label
 
@@ -58,15 +59,17 @@ class DatasetTraj(Dataset):
             # Load data and get label
             if self.mode == 'sim':
                 data = pd.read_csv(f'{file_dir}/../data/sim/{str(id)}.csv')
+                tid = id
             else:
                 window = self.space_time_window_list[id]
                 tid = random.choice(window)
-                data = pd.read_csv(f'{file_dir}/../data/real/{str(int(tid))}.csv')
+                data = pd.read_csv(f'{file_dir}/../data/real/train/{str(int(tid))}.csv')
+
             x1, org= self.trasformer.transform(data)
             total_steps = len(x1)
             dst_idx = randrange(int(0.7*total_steps), total_steps - 1)
             dst = x1[dst_idx]
-            c_range = randrange(int(.25*dst_idx), int(.9*dst_idx))#total_steps#
+            c_range = randrange(int(.50*dst_idx), int(1.0*dst_idx))#total_steps#
             x1 = x1[:c_range]
             org = org[:c_range]
             dst = [dst] * len(org)
@@ -74,31 +77,36 @@ class DatasetTraj(Dataset):
             y = 1
         else:
             # Load data and get label
-            window = self.space_time_window_list[id]
-            ids = random.sample(window, 2)
-            pid, nid = ids[0], ids[1]
             if self.mode == 'sim':
-                pid, nid = ids[0], ids[1]
-                pos_data = pd.read_csv(f'{file_dir}/../data/sim/{str(int(pid))}.csv')
-                neg_data = pd.read_csv(f'{file_dir}/../data/sim/{str(int(nid))}.csv')
+                id = self.list_ids[index]
+                data = pd.read_csv(f'{file_dir}/../data/sim/{str(id)}.csv')
+                x1, x2= self.trasformer.transform(data)
+                y = data.is_positive.iloc[0]
+                tid = id
             else:
-                pos_data = pd.read_csv(f'{file_dir}/../data/real/{str(int(pid))}.csv')
-                neg_data = pd.read_csv(f'{file_dir}/../data/real/{str(int(nid))}.csv')
-            pos_x1, pos_org = self.trasformer.transform(pos_data)
-            neg_x1, neg_org = self.trasformer.transform(neg_data)
+                window = self.space_time_window_list[id]
+                try:
+                    ids = random.sample(window, 2)
+                    pid, nid = ids[0], ids[1]
+                    pos_data = pd.read_csv(f'{file_dir}/../data/real/train/{str(int(pid))}.csv')
+                    neg_data = pd.read_csv(f'{file_dir}/../data/real/train/{str(int(nid))}.csv')
+                    pos_x1, pos_org = self.trasformer.transform(pos_data)
+                    neg_x1, neg_org = self.trasformer.transform(neg_data)
 
-            neg_total_steps = len(neg_x1)
-            pos_total_steps = len(pos_x1)
-            dst_idx = randrange(int(0.7*pos_total_steps), pos_total_steps - 1)
-            dst = pos_x1[dst_idx]
-            c_range = randrange(int(.25*neg_total_steps), int(.9*neg_total_steps))
-            x1 = neg_x1[:c_range]
-            org = [neg_org[0]] * len(x1)
-            dst = [dst] * len(x1)
-            x2 = [org, dst]
-            y = 0
-
-        return x1, x2, y
+                    neg_total_steps = len(neg_x1)
+                    pos_total_steps = len(pos_x1)
+                    dst_idx = randrange(int(0.7*pos_total_steps), pos_total_steps - 1)
+                    dst = pos_x1[dst_idx]
+                    c_range = randrange(int(.50*neg_total_steps), int(1.0*neg_total_steps))
+                    x1 = neg_x1[:c_range]
+                    org = [neg_org[0]] * len(x1)
+                    dst = [dst] * len(x1)
+                    x2 = [org, dst]
+                    y = 0
+                except Exception as e:
+                    print('Exception window', window, pos_trajectory_id, e)
+                tid = nid
+        return x1, x2, y, tid
 
 
 # Cell
