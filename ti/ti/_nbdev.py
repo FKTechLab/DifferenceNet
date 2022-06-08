@@ -14,9 +14,9 @@ index = {"Transformer": "00_prep.ipynb",
          "ContrastiveLoss": "02_model.ipynb",
          "contastive_loss": "02_model.ipynb",
          "device": "03_train.ipynb",
-         "BATCH_SIZE": "03_train.ipynb",
+         "BATCH_SIZE": "04_eval.ipynb",
          "EPOCHS": "03_train.ipynb",
-         "mode": "03_train.ipynb",
+         "mode": "04_eval.ipynb",
          "run_name": "03_train.ipynb",
          "get_data_and_model": "03_train.ipynb",
          "get_prf": "03_train.ipynb",
@@ -25,12 +25,29 @@ index = {"Transformer": "00_prep.ipynb",
          "train": "03_train.ipynb",
          "test": "03_train.ipynb",
          "train_DN": "03_train.ipynb",
-         "train_SN": "03_train.ipynb"}
+         "train_SN": "03_train.ipynb",
+         "threshold": "04_eval.ipynb",
+         "params": "04_eval.ipynb",
+         "stw": "04_eval.ipynb",
+         "ts_range": "04_eval.ipynb",
+         "test_set": "04_eval.ipynb",
+         "test_g": "04_eval.ipynb",
+         "transformer": "04_eval.ipynb",
+         "diff_net": "04_eval.ipynb",
+         "net": "04_eval.ipynb",
+         "criterion": "04_eval.ipynb",
+         "MODEL_SAVE_PATH": "04_eval.ipynb",
+         "checkpoint": "04_eval.ipynb",
+         "epoch": "04_eval.ipynb",
+         "loss": "04_eval.ipynb",
+         "lengths": "04_eval.ipynb",
+         "avg": "04_eval.ipynb"}
 
 modules = ["prep.py",
            "dataloader.py",
            "model.py",
-           "train.py"]
+           "train.py",
+           "eval.py"]
 
 doc_url = "https://pages.github.FKTechLab.com./DifferenceNet/ti/"
 
