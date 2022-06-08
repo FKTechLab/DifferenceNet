@@ -73,7 +73,7 @@ def write_metric(tm, vm, mtype, epoch, batch):
     file_tm = f'train_{mtype}_{epoch}_{batch}.json'
     runs_dir = os.path.join(file_dir, '../runs', run_name)
     if not os.path.exists(runs_dir):
-        os.mkdir(runs_dir)
+        os.makedirs(runs_dir)
     with open (os.path.join(runs_dir, file_tm), 'w') as f:
         json.dump(tm, f)
     file_vm = f'val_{mtype}_{epoch}_{batch}.json'
@@ -139,7 +139,7 @@ def train(model, train_g, val_g, optimizer, criterion, threshold, epoch, print_a
             iterations += 1
         MODEL_SAVE_PATH = os.path.join(file_dir, '../runs', run_name, f'Epoch{i}.pth')
         if not os.path.exists(os.path.join(file_dir, '../runs', run_name)):
-            os.mkdir(os.path.join(file_dir, '../runs', run_name))
+            os.makedirs(os.path.join(file_dir, '../runs', run_name))
         torch.save({
             'epoch': i,
             'model_state_dict': model.state_dict(),
